@@ -1,5 +1,5 @@
 spring:
-  application.name: spring_templates
+  application.name: blog
   datasource:
     url: jdbc:mysql://${DATASOURCE_URL}/${DATASOURCE_PATH}
     username: ${DATASOURCE_USERNAME}
