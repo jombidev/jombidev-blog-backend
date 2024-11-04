@@ -1,14 +1,24 @@
 package dev.jombi.template.core.common.entity
 
 import org.springframework.data.jpa.repository.JpaRepository
-import kotlin.jvm.optionals.getOrNull
+import org.springframework.data.repository.findByIdOrNull
+import java.util.UUID
 
-@JvmInline
-value class FetchableId(private val _id: Long? = null) {
-    val id get() = _id!!
-    fun <T : Any> fetch(repository: JpaRepository<T, Long>) = repository.findById(id).getOrNull()
+sealed interface FetchableId<ID : Any> {
+    val _id: ID?
+    val get get() = _id!!
+    fun <T : Any> fetch(repository: JpaRepository<T, ID>) = repository.findByIdOrNull(get)
 
-    companion object {
-        val NULL = FetchableId(null)
+    @JvmInline
+    value class FetchableUUID(override val _id: UUID?) : FetchableId<UUID> {
+        companion object {
+            val NULL = FetchableUUID(null)
+        }
+    }
+    @JvmInline
+    value class FetchableLong(override val _id: Long?) : FetchableId<Long> {
+        companion object {
+            val NULL = FetchableLong(null)
+        }
     }
 }

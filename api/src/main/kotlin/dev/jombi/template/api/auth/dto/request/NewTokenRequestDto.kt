@@ -1,7 +1,8 @@
 package dev.jombi.template.api.auth.dto.request
 
-import com.fasterxml.jackson.annotation.JsonCreator
+import kotlinx.serialization.Serializable
 
-data class NewTokenRequestDto @JsonCreator constructor(
+@Serializable
+data class NewTokenRequestDto(
     val refreshToken: String
 )

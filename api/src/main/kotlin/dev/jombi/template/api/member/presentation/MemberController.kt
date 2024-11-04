@@ -1,6 +1,6 @@
 package dev.jombi.template.api.member.presentation
 
-import dev.jombi.template.api.member.dto.response.MemberInfoResponseDto
+import dev.jombi.template.business.member.dto.MemberDto
 import dev.jombi.template.business.member.service.MemberService
 import dev.jombi.template.common.response.ResponseData
 import org.springframework.http.ResponseEntity
@@ -14,9 +14,9 @@ class MemberController(
     private val memberService: MemberService
 ) {
     @GetMapping("/me")
-    fun me(): ResponseEntity<ResponseData<MemberInfoResponseDto>> {
+    fun me(): ResponseEntity<ResponseData<MemberDto>> {
         val me = memberService.me()
 
-        return ResponseData.ok(data = MemberInfoResponseDto(me.name))
+        return ResponseData.ok(data = me)
     }
 }

@@ -1,11 +1,10 @@
 spring:
   application.name: spring_templates
   datasource:
-    url: jdbc:mariadb://${DATASOURCE_URL}/${DATASOURCE_PATH}
+    url: jdbc:mysql://${DATASOURCE_URL}/${DATASOURCE_PATH}
     username: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
-    driver-class-name: org.mariadb.jdbc.Driver
-
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
@@ -13,12 +12,19 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 10MB
+      max-file-size: 10MB
 server:
   shutdown: graceful
 
+
 app:
   jwt:
-    secret: ${JWT_SECRET}
+    secret: ${JWT_SECRET:null}
     access_expires_after: 86400000
     refresh_expires_after: 172800000
     issuer: jombi
+  image_uploader_type: local

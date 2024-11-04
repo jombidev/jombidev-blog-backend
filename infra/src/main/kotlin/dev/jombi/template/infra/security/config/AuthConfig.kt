@@ -16,12 +16,10 @@ import org.springframework.security.crypto.password.PasswordEncoder
 class AuthConfig(private val jwtProvider: JwtProvider, private val userDetailsService: UserDetailsService) {
     @Bean
     fun authManager(http: HttpSecurity): AuthenticationManager {
-        val authenticationManagerBuilder = http.getSharedObject(
-            AuthenticationManagerBuilder::class.java
-        )
-        authenticationManagerBuilder.authenticationProvider(jwtProvider) // jwt provider
-        authenticationManagerBuilder.authenticationProvider(daoAuthProvider())
-        return authenticationManagerBuilder.build()
+        return http.getSharedObject(AuthenticationManagerBuilder::class.java)
+            .authenticationProvider(jwtProvider) // jwt provider
+            .authenticationProvider(daoAuthProvider())
+            .build()
     }
 
     fun daoAuthProvider() = DaoAuthenticationProvider().apply {

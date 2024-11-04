@@ -1,9 +1,8 @@
 package dev.jombi.template.api.auth.presentation
 
 import dev.jombi.template.api.auth.dto.request.AuthenticateRequestDto
-import dev.jombi.template.api.auth.dto.request.CreateMemberRequestDto
 import dev.jombi.template.api.auth.dto.request.NewTokenRequestDto
-import dev.jombi.template.api.auth.dto.response.TokenResponseDto
+import dev.jombi.template.business.auth.dto.TokenDto
 import dev.jombi.template.business.auth.service.AuthService
 import dev.jombi.template.common.response.ResponseData
 import jakarta.validation.Valid
@@ -19,20 +18,14 @@ class AuthController(
     private val authService: AuthService
 ) {
     @PostMapping("/login")
-    fun authenticate(@RequestBody @Valid request: AuthenticateRequestDto): ResponseEntity<ResponseData<TokenResponseDto>> {
+    fun authenticate(@RequestBody @Valid request: AuthenticateRequestDto): ResponseEntity<ResponseData<TokenDto>> {
         val dto = authService.authenticate(request.credential, request.password)
-        return ResponseData.ok(data = TokenResponseDto(dto.accessToken, dto.refreshToken))
-    }
-
-    @PostMapping("/register")
-    fun createMember(@RequestBody @Valid request: CreateMemberRequestDto): ResponseEntity<ResponseData<Long>> {
-        val userId = authService.createNewMember(request.name, request.credential, request.password)
-        return ResponseData.ok(data = userId)
+        return ResponseData.ok(data = dto)
     }
 
     @PostMapping("/refresh")
-    fun refreshAccessToken(@RequestBody @Valid request: NewTokenRequestDto): ResponseEntity<ResponseData<TokenResponseDto>> {
+    fun refreshAccessToken(@RequestBody @Valid request: NewTokenRequestDto): ResponseEntity<ResponseData<TokenDto>> {
         val dto = authService.getNewToken(request.refreshToken)
-        return ResponseData.ok(data = TokenResponseDto(dto.accessToken, dto.refreshToken))
+        return ResponseData.ok(data = dto)
     }
 }

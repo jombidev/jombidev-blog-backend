@@ -1,8 +1,8 @@
 package dev.jombi.template.core.member.entity
 
-import dev.jombi.template.core.common.entity.BaseIdTimeEntity
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
+import dev.jombi.template.core.common.entity.BaseTimeEntity
+import dev.jombi.template.core.common.entity.FetchableId.FetchableUUID
+import jakarta.persistence.*
 
 @Entity(name = "tb_member")
 data class Member(
@@ -14,4 +14,8 @@ data class Member(
 
     @Column
     val name: String,
-) : BaseIdTimeEntity()
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    val id: FetchableUUID = FetchableUUID.NULL
+) : BaseTimeEntity()

@@ -1,5 +1,6 @@
 package dev.jombi.template.infra.security.jwt
 
+import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -25,7 +26,18 @@ class JwtProperties(
 
     @OptIn(ExperimentalEncodingApi::class)
     fun secretKey(): SecretKey {
-        if (_key == null) _key = Keys.hmacShaKeyFor(Base64.decode(secret))
+        if (_key == null) {
+            val key = if (secret == "null") {
+                val generated = java.util.Base64.getEncoder().encodeToString(Jwts.SIG.HS512.key().build().encoded)
+                println("JWT Secret is not found on config. Initially generated new Secret to run.")
+                println()
+                println("Your Secret is: $generated")
+                println()
+                generated
+            } else secret
+
+            _key = Keys.hmacShaKeyFor(Base64.decode(key))
+        }
         return _key!!
     }
 }
