@@ -4,9 +4,10 @@ import dev.jombi.blog.business.article.dto.ArticleDto
 import dev.jombi.blog.common.exception.CustomException
 import dev.jombi.blog.common.paged.PageRequest
 import dev.jombi.blog.common.paged.PagedList
-import dev.jombi.blog.core.article.ext.of
 import dev.jombi.blog.core.article.entity.Article
 import dev.jombi.blog.core.article.exception.ArticleExceptionDetails
+import dev.jombi.blog.core.article.ext.of
+import dev.jombi.blog.core.article.ext.ofImageUUID
 import dev.jombi.blog.core.article.repository.ArticleRepository
 import dev.jombi.blog.core.common.entity.FetchableId.FetchableLong
 import dev.jombi.blog.core.common.entity.FetchableId.FetchableUUID
@@ -43,7 +44,7 @@ class ArticleServiceImpl(
 
     override fun getArticles(paged: PageRequest): PagedList<ArticleDto> {
         val articles = articleRepository.findAllOrderByLatest(JpaPageRequest.of(paged.page, paged.size))
-            .map { ArticleDto.of(it) }
+            .map { ArticleDto.ofImageUUID(it) }
 
         return PagedList(
             articles.number,
