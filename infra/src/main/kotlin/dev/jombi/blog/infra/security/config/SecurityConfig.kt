@@ -30,7 +30,7 @@ class SecurityConfig(
             .authorizeHttpRequests {
                 it
                     .requestMatchers("/auth/**").anonymous() // .permitAll()
-                    .requestMatchers(HttpMethod.GET, "/articles", "/articles/{id}").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/articles", "/articles/{id}", "/image/{id}", "/image/{id}/file").permitAll()
                     .anyRequest().authenticated()
             }
             .addFilterAt(authFilter, UsernamePasswordAuthenticationFilter::class.java)
