@@ -2,7 +2,6 @@ package dev.jombi.blog.api.image.presentation
 
 import dev.jombi.blog.business.image.dto.ImageDto
 import dev.jombi.blog.common.multipart.ValidImageFile
-import dev.jombi.blog.common.multipart.guessMediaType
 import dev.jombi.blog.common.response.ResponseData
 import dev.jombi.blog.common.response.ResponseEmpty
 import jakarta.validation.Valid
@@ -12,12 +11,12 @@ import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
-import java.net.URL
+import java.net.URLConnection
 
 @RestController
 @RequestMapping("/image")
 class ImageController(
-    private val imageService: dev.jombi.blog.business.image.service.ImageService
+    private val imageService: dev.jombi.blog.business.image.service.ImageService,
 ) {
     @PostMapping
     @Validated
@@ -25,7 +24,7 @@ class ImageController(
         @Valid
         @ValidImageFile([MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE], 10L * 1024L * 1024L)
         @RequestPart(name = "image", required = true)
-        image: MultipartFile
+        image: MultipartFile,
     ): ResponseEntity<ResponseData<ImageDto>> {
         val imageDto = imageService.uploadImage(image.originalFilename, image.bytes)
         return ResponseData.ok(data = imageDto)
@@ -39,10 +38,12 @@ class ImageController(
 
     @GetMapping("/{id}/file")
     fun getBytes(@PathVariable id: String): ResponseEntity<ByteArray> {
-        val bytes = URL(imageService.getImage(id).url).openStream().readBytes()
+        val image = imageService.getImage(id)
+        val bytes = imageService.readImage(image.id.toString())
+
         return ResponseEntity
             .status(HttpStatus.OK)
-            .contentType(MediaType.parseMediaType(guessMediaType(bytes)))
+            .contentType(MediaType.parseMediaType(URLConnection.guessContentTypeFromName(image.name)))
             .contentLength(bytes.size.toLong())
             .body(bytes)
     }

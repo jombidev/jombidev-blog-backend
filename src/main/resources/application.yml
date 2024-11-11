@@ -17,6 +17,22 @@ spring:
       enabled: true
       max-request-size: 10MB
       max-file-size: 10MB
+  cloud:
+    oci:
+      storage:
+        enabled: true
+      config:
+        region: ${ORACLE_REGION}
+        fingerprint: ${ORACLE_FINGERPRINT}
+        user-id: ${ORACLE_USER}
+        tenant-id: ${ORACLE_TENANCY}
+        private-key: ${ORACLE_KEY_PATH}
+        type: simple
+      region:
+        static: ${ORACLE_REGION}
+      compartment:
+        static: ${ORACLE_COMPARTMENT}
+
 server:
   shutdown: graceful
 
@@ -27,4 +43,6 @@ app:
     access_expires_after: 86400000
     refresh_expires_after: 172800000
     issuer: jombi
-  image_uploader_type: local
+  bucket:
+    bucket-type: ${STORAGE_TYPE:local}
+    bucket-name: ${ORACLE_BUCKET_NAME}

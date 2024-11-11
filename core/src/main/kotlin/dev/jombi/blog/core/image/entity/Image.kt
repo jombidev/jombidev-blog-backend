@@ -10,9 +10,5 @@ class Image(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     val id: FetchableUUID = FetchableUUID.NULL,
-
-    @Column(nullable = false, updatable = false)
-    val url: String,
-
     val name: String,
 ) : BaseTimeEntity()

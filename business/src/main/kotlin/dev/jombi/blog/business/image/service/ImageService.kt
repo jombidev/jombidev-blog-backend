@@ -1,7 +1,10 @@
 package dev.jombi.blog.business.image.service
 
+import dev.jombi.blog.business.image.dto.ImageDto
+
 interface ImageService {
-    fun uploadImage(originalName: String?, bytes: ByteArray): dev.jombi.blog.business.image.dto.ImageDto
+    fun uploadImage(originalName: String?, bytes: ByteArray): ImageDto
     fun deleteImage(id: String)
-    fun getImage(id: String): dev.jombi.blog.business.image.dto.ImageDto
+    fun readImage(id: String): ByteArray
+    fun getImage(id: String): ImageDto
 }

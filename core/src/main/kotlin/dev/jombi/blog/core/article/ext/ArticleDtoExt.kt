@@ -9,7 +9,7 @@ fun ArticleDto.Companion.of(article: Article) =
         article.title,
         article.content,
         article.author.name,
-        article.images.map { it.url }
+        article.images.map { it.id.get }
     )
 
 fun ArticleDto.Companion.ofImageUUID(article: Article) =
@@ -18,5 +18,5 @@ fun ArticleDto.Companion.ofImageUUID(article: Article) =
         article.title,
         article.content,
         article.author.name,
-        article.images.map { it.id.get.toString() }
+        article.images.map { it.id.get }
     )

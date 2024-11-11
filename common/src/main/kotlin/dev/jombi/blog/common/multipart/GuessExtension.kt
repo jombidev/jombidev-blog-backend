@@ -10,7 +10,5 @@ fun guessMediaType(bytes: ByteArray) = DefaultDetector().detect(
     Metadata()
 ).toString()
 
-fun guessExtension(ogName: String?, bytes: ByteArray) =
-    ogName?.substring(ogName.lastIndexOf('.') + 1) ?: TikaConfig.getDefaultConfig().mimeRepository.forName(
-        guessMediaType(bytes)
-    ).extension
+fun guessExtension(bytes: ByteArray) =
+    TikaConfig.getDefaultConfig().mimeRepository.forName(guessMediaType(bytes)).extension

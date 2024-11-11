@@ -35,6 +35,10 @@ allprojects {
                 entry("jjwt-impl")
                 entry("jjwt-jackson")
             }
+
+            dependencySet("com.oracle.cloud.spring:1.3.0") {
+                entry("spring-cloud-oci-starter-storage")
+            }
         }
     }
 
@@ -70,11 +74,13 @@ allprojects {
         implementation(kotlin("reflect"))
 
         /// TEST
-        testImplementation("org.springframework.boot:spring-boot-starter-test")
-        testImplementation("org.springframework.security:spring-security-test")
-
+        testImplementation("org.springframework.boot:spring-boot-starter-test") {
+            exclude("org.mockito")
+        }
         testImplementation(kotlin("test-junit5"))
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+        testImplementation("org.springframework.security:spring-security-test")
+        testImplementation("com.ninja-squad:springmockk:4.0.2")
     }
 }
 
