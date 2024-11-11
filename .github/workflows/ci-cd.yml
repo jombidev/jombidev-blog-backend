@@ -63,9 +63,10 @@ jobs:
             touch ./production.env
             echo '${{ secrets.ENVIRONMENT }}' | base64 --decode > ./production.env
             
-            touch ./oracle.key.pem
-            echo '${{ secrets.ORACLE_KEY }}' | base64 --decode > ./oracle.key.pem
+            mkdir -p ./env
+            touch ./env/oracle.key.pem
+            echo '${{ secrets.ORACLE_KEY }}' | base64 --decode > ./env/oracle.key.pem
             
-            docker run -v .:/env/ --env-file production.env -d -p 8080:8080 --name blog-backend ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}
+            docker run -v ./env:/env/ --env-file production.env -d -p 8080:8080 --name blog-backend ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}
             
             rm ./production.env
