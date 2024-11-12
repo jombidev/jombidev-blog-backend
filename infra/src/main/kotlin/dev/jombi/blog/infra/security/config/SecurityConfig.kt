@@ -44,7 +44,7 @@ class SecurityConfig(
             registerCorsConfiguration("/**",
                 CorsConfiguration()
                     .apply { // kotlin style builder
-                        addAllowedOriginPattern("https://*.jombi.dev")
+                        addAllowedOrigin("https://jombi.dev")
                         addAllowedHeader("*")
                         addAllowedMethod("*")
                         allowCredentials = true
