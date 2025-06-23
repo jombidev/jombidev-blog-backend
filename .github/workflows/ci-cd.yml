@@ -10,10 +10,24 @@ jobs:
       contents: read
 
     steps:
-      - name: Checkout to develop
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: 21 # for virtual thread supports
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build with Gradle
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -37,12 +51,6 @@ jobs:
           file: Dockerfile
           context: .
 
-  publish:
-    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
-    needs: [build]
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Add to Docker
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -55,7 +63,6 @@ jobs:
             docker rm $(docker ps -aq -f 'ancestor=${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}')
 
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
-            
             
             mkdir -p blog-backend
             cd blog-backend
